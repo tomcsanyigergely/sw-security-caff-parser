@@ -1,7 +1,8 @@
-#include <iterator>
-
 #include "jpge.h"
 #include "parser.h"
+
+#include <iterator>
+#include <climits>
 
 bool endsWith(std::string const &str, std::string const &suffix) {
     if (str.length() < suffix.length()) {
@@ -29,7 +30,11 @@ int main(int argc, char** argv)
         filePath.erase(filePath.length()-5);
         filePath = filePath + ".jpg";
 
-        jpge::compress_image_to_jpeg_file(filePath.c_str(), caff.animations[0].ciff.width, caff.animations[0].ciff.height, 3, (jpge::uint8*)(caff.animations[0].ciff.pixels.data()));
+        if (caff.animations[0].ciff.width > INT_MAX || caff.animations[0].ciff.height > INT_MAX) {
+            return -1;
+        }
+
+        jpge::compress_image_to_jpeg_file(filePath.c_str(), (int)caff.animations[0].ciff.width, (int)caff.animations[0].ciff.height, 3, (jpge::uint8*)(caff.animations[0].ciff.pixels.data()));
     }
     else if (fileType == "-ciff" && endsWith(filePath, ".ciff"))
     {
@@ -41,7 +46,11 @@ int main(int argc, char** argv)
         filePath.erase(filePath.length()-5);
         filePath = filePath + ".jpg";
 
-        jpge::compress_image_to_jpeg_file(filePath.c_str(), ciff.width, ciff.height, 3, (jpge::uint8*)(ciff.pixels.data()));
+        if (ciff.width > INT_MAX || ciff.height > INT_MAX) {
+            return -1;
+        }
+
+        jpge::compress_image_to_jpeg_file(filePath.c_str(), (int)ciff.width, (int)ciff.height, 3, (jpge::uint8*)(ciff.pixels.data()));
     }
     else
     {
