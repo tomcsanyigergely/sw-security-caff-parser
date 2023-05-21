@@ -34,7 +34,9 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        jpge::compress_image_to_jpeg_file(filePath.c_str(), (int)caff.animations[0].ciff.width, (int)caff.animations[0].ciff.height, 3, (jpge::uint8*)(caff.animations[0].ciff.pixels.data()));
+        if (!jpge::compress_image_to_jpeg_file(filePath.c_str(), (int)caff.animations[0].ciff.width, (int)caff.animations[0].ciff.height, 3, (jpge::uint8*)(caff.animations[0].ciff.pixels.data()))) {
+			return -1;
+		}
     }
     else if (fileType == "-ciff" && endsWith(filePath, ".ciff"))
     {
@@ -50,7 +52,9 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        jpge::compress_image_to_jpeg_file(filePath.c_str(), (int)ciff.width, (int)ciff.height, 3, (jpge::uint8*)(ciff.pixels.data()));
+        if (!jpge::compress_image_to_jpeg_file(filePath.c_str(), (int)ciff.width, (int)ciff.height, 3, (jpge::uint8*)(ciff.pixels.data()))) {
+			return -1;
+		}
     }
     else
     {
