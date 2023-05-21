@@ -1,7 +1,7 @@
 CC = g++
-WFLAGS = -Wall -Wextra -Wpedantic -Wformat=2 -Wnull-dereference -Wstack-protector -Wstrict-overflow=3 -Wtrampolines -Warray-bounds=2 -Wcast-qual -Wstringop-overflow=4 -Wconversion -Wsign-conversion -Warith-conversion -Wformat-security
-CFLAGS = -O2 -fstack-protector-strong -fstack-clash-protection -fPIE -fcf-protection=full -ftrapv -D_FORTIFY_SOURCE=2
-LDFLAGS = -Wl,-z,now -Wl,-z,relro
+WFLAGS = -Wall -Wextra -Werror -Wpedantic -Wformat=2 -Wnull-dereference -Wstack-protector -Wstrict-overflow=3 -Wtrampolines -Warray-bounds=2 -Wcast-qual -Wstringop-overflow=4 -Wconversion -Wsign-conversion -Warith-conversion -Wformat-security -Walloca -Wnull-dereference -Wvla -Wpointer-arith -Wimplicit-fallthrough 
+CFLAGS = -O2 -fstack-protector-strong -fstack-clash-protection -fPIE -fcf-protection=full -ftrapv -D_FORTIFY_SOURCE=3 -fsanitize=bounds -fsanitize-undefined-trap-on-error -fno-sanitize-recover
+LDFLAGS = -Wl,-z,now -Wl,-z,relro -Wl,-z,noexecstack -Wl,-z,separate-code
 OBJS = main.o parser.o jpge.o
 
 parser: $(OBJS)
