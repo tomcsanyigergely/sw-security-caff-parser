@@ -91,8 +91,7 @@ namespace parser {
         return true;
     }
 
-    bool
-    parseCaffHeader(const std::vector<char> &buffer, uint64_t blockLength, uint64_t &pos, CAFF_HEADER &caffHeader) {
+    bool parseCaffHeader(const std::vector<char> &buffer, uint64_t blockLength, uint64_t &pos, CAFF_HEADER &caffHeader) {
         uint64_t startingPos = pos;
 
         if (!datacopy(caffHeader.magic, buffer, pos, sizeof(caffHeader.magic))) {
@@ -126,8 +125,7 @@ namespace parser {
         return true;
     }
 
-    bool
-    parseCaffCredits(const std::vector<char> &buffer, uint64_t blockLength, uint64_t &pos, CAFF_CREDITS &caffCredits) {
+    bool parseCaffCredits(const std::vector<char> &buffer, uint64_t blockLength, uint64_t &pos, CAFF_CREDITS &caffCredits) {
         uint64_t startingPos = pos;
 
         if (!datacopy(&caffCredits.year, buffer, pos, sizeof(caffCredits.year))) {
@@ -177,8 +175,7 @@ namespace parser {
         return true;
     }
 
-    bool parseCaffAnimation(const std::vector<char> &buffer, uint64_t blockLength, uint64_t &pos,
-                            CAFF_ANIMATION &caffAnimation) {
+    bool parseCaffAnimation(const std::vector<char> &buffer, uint64_t blockLength, uint64_t &pos, CAFF_ANIMATION &caffAnimation) {
         uint64_t startingPos = pos;
 
         if (!datacopy(&caffAnimation.duration, buffer, pos, sizeof(caffAnimation.duration))) {
