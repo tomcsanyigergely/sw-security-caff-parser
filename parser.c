@@ -5,26 +5,28 @@
 
 namespace parser {
     bool datacopy(void *to, const std::vector<char> &from, uint64_t &pos, uint64_t count) {
-        uint64_t startingPos = pos;
+        if (count > 0) {
+            uint64_t startingPos = pos;
 
-        if (count > SIZE_MAX) {
-            return false;
-        }
+            if (count > SIZE_MAX) {
+                return false;
+            }
 
-        uint64_t length = from.size();
+            uint64_t length = from.size();
 
-        if (count > UINT64_MAX - pos || pos + count > length) {
-            return false;
-        }
+            if (count > UINT64_MAX - pos || pos + count > length) {
+                return false;
+            }
 
-        if (to != nullptr) {
-            std::memcpy(to, from.data() + pos, count);
-        }
+            if (to != nullptr) {
+                std::memcpy(to, from.data() + pos, count);
+            }
 
-        pos += count;
+            pos += count;
 
-        if (pos < startingPos) {
-            return false;
+            if (pos < startingPos) {
+                return false;
+            }
         }
 
         return true;
@@ -112,6 +114,10 @@ namespace parser {
             return false;
         }
 
+        if (blockLength != caffHeader.header_size) {
+            return false;
+        }
+
         if (!datacopy(&caffHeader.num_anim, buffer, pos, sizeof(caffHeader.num_anim))) {
             return false;
         }
@@ -154,13 +160,28 @@ namespace parser {
             return false;
         }
 
+        uint64_t caffCreditsFixedPartSize = sizeof(caffCredits.year) +
+                                        sizeof(caffCredits.month) +
+                                        sizeof(caffCredits.day) +
+                                        sizeof(caffCredits.hour) +
+                                        sizeof(caffCredits.minute) +
+                                        sizeof(creator_len);
+
+        if (creator_len > UINT64_MAX - caffCreditsFixedPartSize) {
+            return false;
+        }
+
+        if (caffCreditsFixedPartSize + creator_len != blockLength) {
+            return false;
+        }
+
         if (creator_len > SIZE_MAX - 1) {
             return false;
         }
 
         caffCredits.creator.resize(creator_len + 1);
 
-        if (!datacopy((void*)caffCredits.creator.data(), buffer, pos, creator_len)) {
+        if (!datacopy((void *) caffCredits.creator.data(), buffer, pos, creator_len)) {
             return false;
         }
 
@@ -204,6 +225,8 @@ namespace parser {
         }
 
         std::vector<char> buffer(std::istreambuf_iterator<char>(file), {});
+
+        file.close();
 
         uint64_t pos = 0;
 
@@ -276,6 +299,8 @@ namespace parser {
         }
 
         std::vector<char> buffer(std::istreambuf_iterator<char>(file), {});
+
+        file.close();
 
         uint64_t pos = 0;
 
